@@ -39,15 +39,19 @@ def to_jax_tensor(t):
     return JaxTensor(t)
   return t
 
+
 def map_jax(*ts):
+  ts = tree_map(to_jax, ts)
   if len(ts) == 1:
-    return to_jax(ts)
-  return tree_map(to_jax, ts)
+    return ts[0]
+  return ts
+
 
 def map_jax_tensor(*ts):
+  ts = tree_map(to_jax_tensor, ts)
   if len(ts) == 1:
-    return to_jax_tensor(ts)
-  return tree_map(to_jax_tensor, ts)
+    return ts[0]
+  return ts
 
 
 # All of the tensor examples in this zoo inherit from BaseTensor. Ideally,

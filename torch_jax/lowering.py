@@ -9,7 +9,11 @@ from jax import numpy as jnp
 
 from . import tensor
 
+# Functions with JaxTensor inputs
 _lowerings = {}
+# Functions with jax inputs
+_raw_lowerings = {}
+
 _decompositions = core_aten_decompositions()
 
 
@@ -28,18 +32,26 @@ def register(name):
 
   def inner(func):
     global _lowerings
-    func = functools.partial(call_jax, func)
-    _lowerings[name] = func
+    _raw_lowerings[name] = func
+    _lowerings[name] = functools.partial(call_jax, func)
     return func
 
   return inner
 
 
-def get(op):
+def _get(lowerings, op):
   name = op.name().split(".")[0]
-  if name in _lowerings:
-    return _lowerings[name]
-  return _lowerings[name]
+  if name in lowerings:
+    return lowerings[name]
+  return lowerings[name]
+
+
+def get(op):
+  return _get(_lowerings, op)
+
+
+def get_raw(op):
+  return _get(_raw_lowerings, op)
 
 
 def _get_numpy_dtype(dtype):
