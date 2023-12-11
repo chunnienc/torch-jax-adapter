@@ -1,6 +1,7 @@
 from . import lowering
 from . import tensor
 from . import export
+from . import hlfb
 
 from .tensor import to_jax
 from .tensor import to_jax_tensor

@@ -14,7 +14,7 @@ from . import lowering
 class JaxFxInterpreter(torch.fx.Interpreter):
 
   def call_function(self, target, args, kwargs):
-    return super().call_function(lowering.get_raw(target), args, kwargs)
+    return super().call_function(lowering.get(target).call_jax, args, kwargs)
 
 
 @dataclasses.dataclass

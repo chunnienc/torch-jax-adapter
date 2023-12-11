@@ -1,5 +1,10 @@
 # PyTorch-JAX Adapter
 
+(Experimental) JAX backend for PyTorch. This project supports:
+
+- Run PyTorch models on XLA CPU/GPU/TPU, without any modifications.
+- Export PyTorch models to StableHLO/TF/TFLite (through PT2E).
+
 ## Action Items
 
 ### Initialization
@@ -19,7 +24,7 @@
 - [x] Add export API to TF SavedModel ([example](examples/torch_to_tf_saved_model.py))
 - [x] Add export API to TFLite flatbuffer ([example](examples/torch_to_tflite.py))
 - [ ] Quantization Q/DQ ops
-- [ ] StableHLO Composite (HLFB)
+- [x] StableHLO Composite (HLFB) ([example](examples/hlfb_stablehlo_composite.py))
 - [ ] Custom lowering
 
 ### ODML

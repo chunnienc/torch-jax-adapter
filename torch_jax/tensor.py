@@ -40,6 +40,13 @@ def to_jax_tensor(t):
   return t
 
 
+def strict_to_jax_tensor(t):
+  """Same as to_jax but rejects regular torch tensor."""
+  if isinstance(t, torch.Tensor) and not hasattr(t, "_elem"):
+    raise ValueError("torch.Tensor is not accepted.")
+  return to_jax_tensor(t)
+
+
 def map_jax(*ts):
   ts = tree_map(to_jax, ts)
   if len(ts) == 1:
@@ -76,6 +83,9 @@ class JaxTensor(torch.Tensor):
   def __str__(self):
     return f"[JaxTensor({type(self._elem)})] {self._elem}"
 
+  def __jax_array__(self):
+    return self._elem
+
   @property
   def shape(self):
     return self._elem.shape
@@ -106,7 +116,7 @@ class JaxTensor(torch.Tensor):
   @classmethod
   def __torch_dispatch__(cls, func, types, args=(), kwargs=None):
     # print('running...', func.name())
-    res = lowering.get(func)(*args, **kwargs)
+    res = lowering.get(func).call_torch(*args, **kwargs)
     # run_torch_and_diff(func, args, kwargs, res)
     if func.name() == "aten::copy_":
       args[0]._elem = res._elem
