@@ -69,7 +69,7 @@ def torch_impl(spec: str, name: str, attributes: Dict[str, Any]):
   def register(torch_func):
     jax_func = functools.partial(lowering._jax_io_to_jax_tensor_func, torch_func)
 
-    def jax_lowering(*args, **kwargs):
+    def composite_func(*args, **kwargs):
       if kwargs:
         raise ValueError("StableHLO Composite impl does not accept keyword arguments.")
       for arg in args:
@@ -78,6 +78,6 @@ def torch_impl(spec: str, name: str, attributes: Dict[str, Any]):
       # return _call_composite(torch_func, *args, name=name, attributes=attributes)
       return _call_composite(jax_func, *args, name=name, attributes=attributes)
 
-    return custom_op.define(spec, torch_func, jax_lowering)
+    return custom_op._define(spec, torch_func, composite_func)
 
   return register
