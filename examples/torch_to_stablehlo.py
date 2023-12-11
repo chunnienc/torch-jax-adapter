@@ -27,7 +27,7 @@ def main():
   args = (a, b)
   ep = torch.export.export(m, args)
 
-  jax_f = tj.export.exported_program_to_jax_callable(ep)
+  jax_f = tj.export.exported_program_to_jax_program(ep)
   jax_args = tj.map_jax(args)
 
   lowered = jax.jit(jax_f).lower(jax_args)
