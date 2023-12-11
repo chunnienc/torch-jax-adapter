@@ -13,6 +13,7 @@
 
 ### General
 
+- [x] Run a simple PyTorch model through JAX ([example](examples/run_with_jax.py))
 - [ ] Setup package requirements
 - [ ] Setup pip package
 - [ ] Port Aten op test suite from `torch_xla`
@@ -25,7 +26,7 @@
 - [x] Add export API to TFLite flatbuffer ([example](examples/torch_to_tflite.py))
 - [ ] Quantization Q/DQ ops
 - [x] StableHLO Composite (HLFB) ([example](examples/hlfb_stablehlo_composite.py))
-- [ ] Custom lowering
+- [ ] Custom lowering for non-torch-exportable computation blocks (partially done)
 
 ### ODML
 
