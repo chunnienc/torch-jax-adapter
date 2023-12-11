@@ -26,6 +26,7 @@
 - [x] Add export API to TFLite flatbuffer ([example](examples/torch_to_tflite.py))
 - [ ] Quantization Q/DQ ops
 - [x] StableHLO Composite (HLFB) ([example](examples/hlfb_stablehlo_composite.py))
+  - This implementation works natively and prefectly with FX-based HLFB pattern matching.
 - [x] Custom lowering for non-torch-exportable computation blocks ([example](examples/custom_op_lowering.py))
 
 ### ODML

@@ -12,11 +12,12 @@ from jax.interpreters import mlir
 from jax._src.lib.mlir import ir
 import torch_jax as tj
 
-# Create _rms_norm_fwd_p for forward operation.
+# Create a jax primitive for the computation block.
 run_magic_p = jax_core.Primitive("run_magic")
 run_magic_p.def_impl(functools.partial(xla.apply_primitive, run_magic_p))
 
 
+# Define the lowering and abstract for the Jax primitive.
 def run_magic_lowering(ctx, x):
   custom_call = hlo.CustomCallOp(
       [x.type],
@@ -36,14 +37,18 @@ def run_magic_abstract(x):
 run_magic_p.def_abstract_eval(run_magic_abstract)
 
 
+# Define a function to run the created primitive with Jax values.
 def run_magic_jax(x):
   return run_magic_p.bind(x)
 
 
+# Torch op meta function: for PT2 export
 def run_magic_meta(x):
   return torch.empty_like(x)
 
 
+# Define a torch function to run the computation block. This function can be executed with torch (JaxTensor),
+# and also used in PT2E and Jax lowering.
 @tj.custom_op.define("run_magic(Tensor x) -> Tensor", run_magic_jax, run_magic_meta)
 def run_magic(x):
   import math
