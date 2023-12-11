@@ -25,6 +25,18 @@ def exported_program_to_tf_function(ep: torch.export.ExportedProgram, enable_xla
   return tf_f
 
 
+def exported_program_to_tf_module(
+    ep: torch.export.ExportedProgram,
+    serving_key: str = tf.saved_model.DEFAULT_SERVING_SIGNATURE_DEF_KEY,
+    function_alias: str = "",
+    enable_xla=False,
+):
+  tfm = tf.Module()
+  tfm.f = exported_program_to_tf_function(ep, enable_xla)
+
+  return tfm
+
+
 def save_exported_program_as_tf_saved_model(
     ep: torch.export.ExportedProgram,
     saved_model_dir: os.PathLike,
@@ -32,9 +44,12 @@ def save_exported_program_as_tf_saved_model(
     function_alias: str = "",
     enable_xla=False,
 ):
-  tfm = tf.Module()
-  tfm.f = exported_program_to_tf_function(ep)
-
+  tfm = exported_program_to_tf_module(
+      ep,
+      serving_key=serving_key,
+      function_alias=function_alias,
+      enable_xla=enable_xla,
+  )
   signatures = {serving_key: tfm.f.get_concrete_function(*tfm.f.input_signature)}
   save_options = tf.saved_model.SaveOptions(
       function_aliases={
@@ -47,3 +62,11 @@ def save_exported_program_as_tf_saved_model(
       signatures=signatures,
       options=save_options,
   )
+
+
+def exported_program_to_tflite_flatbuffer(ep: torch.export.ExportedProgram):
+  tfm = exported_program_to_tf_module(ep)
+  tf_concrete_func = tfm.f.get_concrete_function(*tfm.f.input_signature)
+  converter = tf.lite.TFLiteConverter.from_concrete_functions([tf_concrete_func], tfm)
+  tflite_model = converter.convert()
+  return tflite_model

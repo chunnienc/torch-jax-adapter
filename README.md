@@ -4,7 +4,7 @@
 
 ### Initialization
 
-- [ ] Port Han's implementation of [jax integration](https://github.com/qihqi/gpt-fast/blob/jax_experiment/jax_integration.py)
+- [x] Port Han's implementation of [jax integration](https://github.com/qihqi/gpt-fast/blob/jax_experiment/jax_integration.py)
 
 ### General
 
@@ -14,9 +14,10 @@
 
 ### Export
 
-- [ ] Add export API to StableHLO MLIR
-- [ ] Add export API to TF concrete function
-- [ ] Add export API to TFLite flatbuffer
+- [x] Add export API to StableHLO MLIR ([example](examples/torch_to_stablehlo.py))
+- [x] Add export API to TF concrete function ([example](examples/torch_to_tf.py))
+- [x] Add export API to TF SavedModel ([example](examples/torch_to_tf_saved_model.py))
+- [x] Add export API to TFLite flatbuffer ([example](examples/torch_to_tflite.py))
 - [ ] Quantization Q/DQ ops
 - [ ] StableHLO Composite (HLFB)
 - [ ] Custom lowering
