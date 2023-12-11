@@ -19,6 +19,7 @@ run_magic_p.def_impl(functools.partial(xla.apply_primitive, run_magic_p))
 
 # Define the lowering and abstract for the Jax primitive.
 def run_magic_lowering(ctx, x):
+  # TODO: Try to lower to another MLIR dialect.
   custom_call = hlo.CustomCallOp(
       [x.type],
       [x],
