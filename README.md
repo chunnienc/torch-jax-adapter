@@ -5,6 +5,8 @@
 - Run PyTorch models on XLA CPU/GPU/TPU, without any modifications.
 - Export PyTorch models to StableHLO/TF/TFLite (through PT2E).
 
+This project is independent to existing PyTorch/XLA code base. It can be viewed as a parallel stack or alternative solution to the PyTorch/XLA today.
+
 ## Action Items
 
 ### Initialization
